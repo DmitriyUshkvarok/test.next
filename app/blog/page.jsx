@@ -1,24 +1,24 @@
-import Link from 'next/link';
+'use client';
+import { useEffect, useState } from 'react';
+import { getAllPosts } from '@/services/getPosts';
+import Posts from '../components/Posts';
+import PostSearch from '../components/PostSearch';
 
-async function getData() {
-  const response = await fetch('https://jsonplaceholder.typicode.com/posts/');
-  return response.json();
-}
+export default function Blog() {
+  const [posts, setPosts] = useState();
+  const [loading, setLoading] = useState(true);
 
-const Blog = async () => {
-  const posts = await getData();
+  useEffect(() => {
+    getAllPosts()
+      .then(setPosts)
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <>
       <h2>welcome to blog page</h2>
-      <ul>
-        {posts.map((el) => (
-          <li key={el.id}>
-            <Link href={`/blog/${el.id}`}>{el.title}</Link>
-          </li>
-        ))}
-      </ul>
+      <PostSearch onSearch={setPosts} />
+      {loading ? <h3>Loading...</h3> : <Posts posts={posts} />}
     </>
   );
-};
-
-export default Blog;
+}

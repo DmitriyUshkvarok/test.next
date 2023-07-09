@@ -93,3 +93,7 @@ a {
     color-scheme: dark;
   }
 }
+
+.active {
+  color: blue;
+}
